@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MoodFlow | daily intentions</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <h1><i class="fas fa-feather-alt"></i> MoodFlow</h1>
+            <p>daily intentions · emotional compass</p>
+        </div>
+        <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> Dark mode</button>
+    </div>
+
+    <div class="grid-2col">
+        <!-- LEFT: Mood + Journal entry -->
+        <div class="card">
+            <h2><i class="fas fa-smile-wink"></i> How are you today?</h2>
+            <div class="mood-buttons" id="moodContainer">
+                <button class="mood-btn" data-mood="radiant">✨ Radiant</button>
+                <button class="mood-btn" data-mood="calm">🌸 Calm</button>
+                <button class="mood-btn" data-mood="tired">🌙 Tired</button>
+                <button class="mood-btn" data-mood="stressed">⚡ Stressed</button>
+            </div>
+            <input type="text" id="entryTitle" placeholder="Title (e.g., morning reflection)" />
+            <textarea id="entryNote" rows="3" placeholder="Write what's on your mind..."></textarea>
+            <button class="primary" id="saveEntryBtn"><i class="fas fa-save"></i> Save intention + mood</button>
+        </div>
+
+        <!-- RIGHT: Stats + Recent entries -->
+        <div class="card">
+            <h2><i class="fas fa-chart-line"></i> Your emotional log</h2>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-number" id="totalCount">0</div><div>entries</div></div>
+                <div class="stat-card"><div class="stat-number" id="streakCount">0</div><div>day streak</div></div>
+                <div class="stat-card"><div class="stat-number" id="topMood">—</div><div>top mood</div></div>
+            </div>
+            <div style="margin: 20px 0 8px; font-weight: 600;">📖 Recent entries</div>
+            <div class="history-list" id="historyList">
+                <div class="empty-msg">✨ No entries yet. Write your first intention!</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <i class="fas fa-heart" style="color:#e28d6c;"></i> MoodFlow — your private journal & mood tracker · data stays on your device
+    </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
