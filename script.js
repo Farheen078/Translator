@@ -1,8 +1,8 @@
-// ---------- APP STATE ----------
-let entries = [];       // each: { id, date, mood, title, note }
+
+let entries = [];     
 let selectedMood = "radiant";
 
-// DOM elements
+
 const moodBtns = document.querySelectorAll('.mood-btn');
 const entryTitle = document.getElementById('entryTitle');
 const entryNote = document.getElementById('entryNote');
@@ -13,14 +13,14 @@ const streakSpan = document.getElementById('streakCount');
 const topMoodSpan = document.getElementById('topMood');
 const themeToggle = document.getElementById('themeToggle');
 
-// ---------- LOCALSTORAGE ----------
+
 function loadFromStorage() {
     const stored = localStorage.getItem('moodflow_entries');
     if (stored) {
         entries = JSON.parse(stored);
         entries.sort((a, b) => new Date(b.date) - new Date(a.date));
     } else {
-        // sample demo entry
+       
         entries = [{
             id: Date.now(),
             date: new Date().toISOString(),
@@ -36,7 +36,7 @@ function saveToStorage() {
     localStorage.setItem('moodflow_entries', JSON.stringify(entries));
 }
 
-// streak calculation (consecutive days with at least one entry)
+
 function calculateStreak() {
     if (entries.length === 0) return 0;
     const uniqueDays = new Set();
@@ -48,7 +48,7 @@ function calculateStreak() {
     if (sortedDays.length === 0) return 0;
     let streak = 1;
     const todayStr = new Date().toISOString().split('T')[0];
-    if (sortedDays[0] !== todayStr) return 0; // no entry today → streak 0
+    if (sortedDays[0] !== todayStr) return 0; 
     for (let i = 0; i < sortedDays.length - 1; i++) {
         const current = new Date(sortedDays[i]);
         const next = new Date(sortedDays[i + 1]);
@@ -59,7 +59,7 @@ function calculateStreak() {
     return streak;
 }
 
-// most frequent mood
+
 function getTopMood() {
     if (entries.length === 0) return "—";
     const moodCount = {};
@@ -72,7 +72,6 @@ function getTopMood() {
     return moodEmojis[top] || top;
 }
 
-// render history entries
 function renderHistory() {
     if (!historyDiv) return;
     if (entries.length === 0) {
@@ -98,7 +97,7 @@ function renderHistory() {
             </div>
         `;
     }).join('');
-    // attach delete events
+  
     document.querySelectorAll('.delete-entry').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -135,7 +134,6 @@ function renderAll() {
     updateStats();
 }
 
-// save new entry
 function saveCurrentEntry() {
     const title = entryTitle.value.trim();
     const note = entryNote.value.trim();
@@ -155,7 +153,7 @@ function saveCurrentEntry() {
     entryTitle.value = "";
     entryNote.value = "";
     renderAll();
-    // feedback toast
+  
     const feedback = document.createElement('div');
     feedback.innerText = "✓ saved";
     feedback.style.position = "fixed";
@@ -171,7 +169,7 @@ function saveCurrentEntry() {
     setTimeout(() => feedback.remove(), 1500);
 }
 
-// mood selection UI
+
 function initMoodSelection() {
     moodBtns.forEach(btn => {
         const moodVal = btn.getAttribute('data-mood');
@@ -184,7 +182,7 @@ function initMoodSelection() {
     });
 }
 
-// dark mode persistence
+
 function initTheme() {
     const storedTheme = localStorage.getItem('moodflow_theme');
     if (storedTheme === 'dark') {
@@ -202,13 +200,13 @@ function initTheme() {
     });
 }
 
-// initialise everything
+
 loadFromStorage();
 initMoodSelection();
 initTheme();
 saveBtn.addEventListener('click', saveCurrentEntry);
 
-// Ctrl+Enter shortcut for saving
+
 entryNote.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.key === 'Enter') saveCurrentEntry();
 });
