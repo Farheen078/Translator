@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>MoodFlow | daily intentions</title>
+    <title>MoodFlow | elevated mood journal</title>
     <link rel="stylesheet" href="style.css">
-  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -17,11 +16,15 @@
             <h1><i class="fas fa-feather-alt"></i> MoodFlow</h1>
             <p>daily intentions · emotional compass</p>
         </div>
-        <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> Dark mode..</button>
+        <div class="header-actions">
+            <button class="icon-btn" id="exportBtn" title="Export data"><i class="fas fa-download"></i></button>
+            <button class="icon-btn" id="importBtn" title="Import data"><i class="fas fa-upload"></i></button>
+            <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> Dark mode</button>
+        </div>
     </div>
 
     <div class="grid-2col">
-       
+        <!-- LEFT: Entry form -->
         <div class="card">
             <h2><i class="fas fa-smile-wink"></i> How are you today?</h2>
             <div class="mood-buttons" id="moodContainer">
@@ -31,11 +34,12 @@
                 <button class="mood-btn" data-mood="stressed">⚡ Stressed</button>
             </div>
             <input type="text" id="entryTitle" placeholder="Title (e.g., morning reflection)" />
-            <textarea id="entryNote" rows="3" placeholder="Write what's on your mind......."></textarea>
+            <textarea id="entryNote" rows="3" placeholder="Write what's on your mind..."></textarea>
             <button class="primary" id="saveEntryBtn"><i class="fas fa-save"></i> Save intention + mood</button>
+            <div class="edit-mode-indicator" id="editIndicator" style="display: none;">✏️ Editing entry — save will update</div>
         </div>
 
-       
+        <!-- RIGHT: Stats + chart + entries -->
         <div class="card">
             <h2><i class="fas fa-chart-line"></i> Your emotional log</h2>
             <div class="stats-grid">
@@ -43,6 +47,11 @@
                 <div class="stat-card"><div class="stat-number" id="streakCount">0</div><div>day streak</div></div>
                 <div class="stat-card"><div class="stat-number" id="topMood">—</div><div>top mood</div></div>
             </div>
+            
+            <!-- Mood trend chart -->
+            <div style="margin: 20px 0 8px; font-weight: 600;">📊 mood trend (last 7 days)</div>
+            <canvas id="moodChart" width="400" height="180" style="max-height: 180px; width: 100%;"></canvas>
+            
             <div style="margin: 20px 0 8px; font-weight: 600;">📖 Recent entries</div>
             <div class="history-list" id="historyList">
                 <div class="empty-msg">✨ No entries yet. Write your first intention!</div>
@@ -51,9 +60,12 @@
     </div>
 
     <footer>
-        <i class="fas fa-heart" style="color:#e28d6c;"></i> MoodFlows — your private journal & mood tracker · data stays on your device
+        <i class="fas fa-heart" style="color:#e28d6c;"></i> MoodFlow — your private journal & mood tracker · data stays on your device
     </footer>
 </div>
+
+<!-- Hidden file input for import -->
+<input type="file" id="importFileInput" accept=".json" style="display: none;">
 
 <script src="script.js"></script>
 </body>

@@ -52,15 +52,40 @@ body.dark .header {
     color: #aa8e7a;
 }
 
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.icon-btn {
+    background: rgba(0,0,0,0.05);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+body.dark .icon-btn {
+    background: rgba(255,255,255,0.1);
+    color: #ffefdf;
+}
+
+.icon-btn:hover {
+    background: rgba(0,0,0,0.1);
+    transform: scale(1.02);
+}
+
 .theme-toggle {
     background: rgba(0,0,0,0.05);
     border: none;
-    padding: 12px 20px;
+    padding: 10px 20px;
     border-radius: 60px;
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
-    backdrop-filter: blur(4px);
 }
 
 body.dark .theme-toggle {
@@ -68,7 +93,6 @@ body.dark .theme-toggle {
     color: #ffe6d5;
 }
 
-/* grid */
 .grid-2col {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -179,19 +203,26 @@ button.primary:hover {
     transform: scale(0.98);
 }
 
+.edit-mode-indicator {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: #e28d6c;
+    text-align: center;
+}
+
 .history-list {
     max-height: 380px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     margin-top: 16px;
 }
 
 .entry {
     background: rgba(255,245,235,0.6);
     border-radius: 24px;
-    padding: 16px;
+    padding: 14px;
     transition: 0.1s;
 }
 
@@ -202,12 +233,25 @@ body.dark .entry {
 .entry-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-weight: 600;
     margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.mood-icon {
-    font-size: 1.2rem;
+.entry-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.entry-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #c67f64;
+    font-size: 0.9rem;
+    padding: 4px;
 }
 
 .entry-text {
@@ -218,14 +262,6 @@ body.dark .entry {
 
 body.dark .entry-text {
     color: #cfbfb0;
-}
-
-.delete-entry {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #c67f64;
-    font-size: 1rem;
 }
 
 .empty-msg {
@@ -240,6 +276,7 @@ body.dark .entry-text {
     gap: 16px;
     flex-wrap: wrap;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .stat-card {
@@ -272,5 +309,9 @@ footer {
     }
     .logo h1 {
         font-size: 1.5rem;
+    }
+    .header-actions {
+        width: 100%;
+        justify-content: flex-end;
     }
 }
