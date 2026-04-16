@@ -1,10 +1,9 @@
-// ---------- STATE ----------
-let entries = [];           // each: { id, date, mood, title, note }
-let selectedMood = "radiant";
-let editingId = null;       // if not null, we're editing this entry
-let moodChart = null;       // Chart.js instance
 
-// DOM elements
+let entries = [];          
+let selectedMood = "radiant";
+let editingId = null;      
+
+
 const moodBtns = document.querySelectorAll('.mood-btn');
 const entryTitle = document.getElementById('entryTitle');
 const entryNote = document.getElementById('entryNote');
@@ -19,23 +18,23 @@ const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const importFileInput = document.getElementById('importFileInput');
 
-// ---------- HELPER: mood to numeric value (for chart) ----------
+
 function moodToValue(mood) {
     const map = { radiant: 4, calm: 3, tired: 2, stressed: 1 };
     return map[mood] || 2;
 }
 
-// ---------- CHART: update mood trend (last 7 days) ----------
+
 function updateMoodChart() {
     const ctx = document.getElementById('moodChart').getContext('2d');
-    // Get last 7 days
+    
     const last7Days = [];
     for (let i = 6; i >= 0; i--) {
         const d = new Date();
         d.setDate(d.getDate() - i);
         last7Days.push(d.toISOString().split('T')[0]);
     }
-    // Average mood per day (if multiple entries, take average)
+   
     const dailyAvg = last7Days.map(day => {
         const dayEntries = entries.filter(e => e.date.split('T')[0] === day);
         if (dayEntries.length === 0) return null;
@@ -43,7 +42,7 @@ function updateMoodChart() {
         return avg;
     });
     
-    const labels = last7Days.map(d => d.slice(5)); // "MM-DD"
+    const labels = last7Days.map(d => d.slice(5));
     const data = dailyAvg.map(v => v !== null ? v : null);
     
     if (moodChart) {
@@ -91,14 +90,14 @@ function updateMoodChart() {
     }
 }
 
-// ---------- STORAGE ----------
+
 function loadFromStorage() {
     const stored = localStorage.getItem('moodflow_entries');
     if (stored) {
         entries = JSON.parse(stored);
         entries.sort((a, b) => new Date(b.date) - new Date(a.date));
     } else {
-        // sample welcome entry
+       
         entries = [{
             id: Date.now(),
             date: new Date().toISOString(),
@@ -114,7 +113,7 @@ function saveToStorage() {
     localStorage.setItem('moodflow_entries', JSON.stringify(entries));
 }
 
-// ---------- STREAK CALCULATION ----------
+
 function calculateStreak() {
     if (entries.length === 0) return 0;
     const uniqueDays = new Set();
@@ -136,7 +135,7 @@ function calculateStreak() {
     return streak;
 }
 
-// ---------- TOP MOOD ----------
+
 function getTopMood() {
     if (entries.length === 0) return "—";
     const moodCount = {};
@@ -149,7 +148,7 @@ function getTopMood() {
     return moodEmojis[top] || top;
 }
 
-// ---------- RENDER HISTORY (with edit/delete buttons) ----------
+
 function renderHistory() {
     if (!historyDiv) return;
     if (entries.length === 0) {
@@ -179,7 +178,7 @@ function renderHistory() {
         `;
     }).join('');
     
-    // attach edit/delete events
+  
     document.querySelectorAll('.delete-entry').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -222,7 +221,7 @@ function startEditEntry(id) {
     selectedMood = entry.mood;
     entryTitle.value = entry.title || '';
     entryNote.value = entry.note || '';
-    // update mood UI
+    
     moodBtns.forEach(btn => {
         if (btn.getAttribute('data-mood') === selectedMood) btn.classList.add('active');
         else btn.classList.remove('active');
@@ -237,10 +236,10 @@ function cancelEdit() {
     entryNote.value = '';
     editIndicator.style.display = 'none';
     saveBtn.innerHTML = '<i class="fas fa-save"></i> Save intention + mood';
-    // reset mood to default? keep current selection
+   
 }
 
-// ---------- SAVE (create or update) ----------
+
 function saveCurrentEntry() {
     const title = entryTitle.value.trim();
     const note = entryNote.value.trim();
@@ -249,7 +248,7 @@ function saveCurrentEntry() {
         return;
     }
     if (editingId !== null) {
-        // update existing
+       
         const index = entries.findIndex(e => e.id === editingId);
         if (index !== -1) {
             entries[index] = {
@@ -257,12 +256,12 @@ function saveCurrentEntry() {
                 mood: selectedMood,
                 title: title || "untitled moment",
                 note: note || "no additional note",
-                date: new Date().toISOString()  // update timestamp
+                date: new Date().toISOString()  
             };
         }
         cancelEdit();
     } else {
-        // create new
+      
         const newEntry = {
             id: Date.now(),
             date: new Date().toISOString(),
@@ -276,7 +275,7 @@ function saveCurrentEntry() {
     renderAll();
     entryTitle.value = "";
     entryNote.value = "";
-    // feedback toast
+   
     const feedback = document.createElement('div');
     feedback.innerText = editingId !== null ? "✓ updated" : "✓ saved";
     feedback.style.cssText = "position:fixed; bottom:20px; right:20px; background:#e28d6c; color:white; padding:8px 18px; border-radius:40px; font-weight:500; z-index:999;";
@@ -284,7 +283,7 @@ function saveCurrentEntry() {
     setTimeout(() => feedback.remove(), 1500);
 }
 
-// ---------- UPDATE STATS & CHART & RENDER ----------
+
 function updateStats() {
     totalSpan.innerText = entries.length;
     streakSpan.innerText = calculateStreak();
@@ -297,7 +296,7 @@ function renderAll() {
     updateMoodChart();
 }
 
-// ---------- EXPORT / IMPORT ----------
+
 function exportData() {
     const dataStr = JSON.stringify(entries, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
@@ -330,7 +329,7 @@ function importData(file) {
     reader.readAsText(file);
 }
 
-// ---------- MOOD SELECTION ----------
+
 function initMoodSelection() {
     moodBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -339,12 +338,12 @@ function initMoodSelection() {
             selectedMood = btn.getAttribute('data-mood');
         });
     });
-    // set default active
+  
     const defaultBtn = document.querySelector(`.mood-btn[data-mood="${selectedMood}"]`);
     if (defaultBtn) defaultBtn.classList.add('active');
 }
 
-// ---------- THEME ----------
+
 function initTheme() {
     const storedTheme = localStorage.getItem('moodflow_theme');
     if (storedTheme === 'dark') {
@@ -362,7 +361,7 @@ function initTheme() {
     });
 }
 
-// ---------- INIT ----------
+
 loadFromStorage();
 initMoodSelection();
 initTheme();
@@ -374,7 +373,7 @@ importFileInput.addEventListener('change', (e) => {
     importFileInput.value = '';
 });
 
-// Ctrl+Enter shortcut
+
 entryNote.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.key === 'Enter') saveCurrentEntry();
 });
