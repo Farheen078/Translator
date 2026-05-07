@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 Google Translate Clone – run this script, open browser, and translate text.
 Requires: pip install flask deep-translator
@@ -8,7 +8,7 @@ import subprocess
 import sys
 import os
 
-# Auto-install missing packages
+
 def install_package(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
@@ -24,7 +24,7 @@ except ImportError as e:
 
 app = Flask(__name__)
 
-# Language mapping (full names)
+
 LANGUAGES = {
     'af': 'Afrikaans', 'sq': 'Albanian', 'am': 'Amharic', 'ar': 'Arabic', 'hy': 'Armenian', 'az': 'Azerbaijani',
     'eu': 'Basque', 'be': 'Belarusian', 'bn': 'Bengali', 'bs': 'Bosnian', 'bg': 'Bulgarian', 'ca': 'Catalan',
@@ -322,7 +322,7 @@ def translate_text():
         return jsonify({'translated': ''})
     
     try:
-        # Use deep-translator (more reliable)
+       
         if source == 'auto':
             translator = GoogleTranslator(source='auto', target=target)
         else:
